@@ -24,8 +24,8 @@ Check out our http://odoo-restapi.readthedocs.io online docs for a quick referen
     'author': 'Synconics Technologies Pvt. Ltd.',
     'website': 'https://www.synconics.com',
     'depends': ['base', 'web', 'base_automation'],
-    'external_dependencies': {
-            'python': ['oauthlib']},
+    # 'external_dependencies': {
+    #         'python': ['oauthlib']},
     'data': [
         'views/auth_view.xml',
         'views/restapi_cron.xml',
@@ -46,13 +46,4 @@ Check out our http://odoo-restapi.readthedocs.io online docs for a quick referen
     'auto_install': False,
     'application': True,
     'license': 'OPL-1',
-
-    'external_dependencies': {
-        'python': [
-            'oauthlib',
-            'urlparse',
-        ]
-    },
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
