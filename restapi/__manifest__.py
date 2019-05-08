@@ -46,6 +46,13 @@ Check out our http://odoo-restapi.readthedocs.io online docs for a quick referen
     'auto_install': False,
     'application': True,
     'license': 'OPL-1',
+
+    'external_dependencies': {
+        'python': [
+            'oauthlib',
+            'urlparse',
+        ]
+    },
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
