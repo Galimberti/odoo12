@@ -8,7 +8,13 @@ import json
 import werkzeug
 import urllib
 from datetime import datetime, timedelta
-from oauthlib.common import add_params_to_uri
+import pip
+try:
+    from oauthlib.common import add_params_to_uri
+except ImportError:
+    print('\n There was no such module named -oauthlib- installed')
+    print('xxxxxxxxxxxxxxxx installing oauthlib xxxxxxxxxxxxxx')
+    pip.main(['install', 'oauthlib'])
 from odoo.tools.safe_eval import safe_eval
 from odoo.addons.web.controllers.main import WebClient
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
