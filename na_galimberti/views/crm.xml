@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_action_quotations_new" model="ir.actions.act_window">
+        <field name="name">Acquisto</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">form,tree,graph</field>
+        <field name="domain">[('opportunity_id', '=', active_id)]</field>
+        <field name="context">{'search_default_opportunity_id': active_id, 'default_opportunity_id': active_id}</field>
+    </record>
+
+    <record id="purchase_action_quotations" model="ir.actions.act_window">
+        <field name="name">Acquisti</field>
+        <field name="res_model">purchase.order</field>
+        <field name="domain">[('opportunity_id', '=', active_id)]</field>
+        <field name="context">{'search_default_opportunity_id': [active_id], 'default_opportunity_id': active_id}</field>
+    </record>
+
+    <record id="na_crm_case_form_view_oppor" model="ir.ui.view">
+        <field name="name">na.crm.lead.form.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_set_won_rainbowman']" position="before">
+                    <button string="NUOVO ACQUISTO" name="%(purchase_action_quotations_new)d" type="action" class="oe_highlight"
+                        context="{'search_default_partner_id': fornitore_id, 'default_partner_id': fornitore_id}"
+                            attrs="{'invisible': [('tipo_offerta', '!=', 'Richiesta di Offerta')]}"/>
+            </xpath>
+
+            <button name="toggle_active" position="before">
+                <button class="oe_stat_button" type="action" name="%(purchase_action_quotations)d"
+                        icon="fa-pencil-square-o"
+                        context="{'default_partner_id': fornitore_id}">
+                    <div class="o_stat_info">
+                        <field name="purchase_number" class="o_stat_value"/>
+                        <span class="o_stat_text"> Acquisto(i) </span>
+                    </div>
+                </button>
+            </button>
+
+            <xpath expr="//field[@name='partner_id']" position="before">
+                <field name="tipo_offerta" widget="radio"/>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="attrs">{'invisible': [('tipo_offerta', '=', 'Richiesta di Offerta')]}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="fornitore_id" attrs="{'invisible': [('tipo_offerta', '!=', 'Richiesta di Offerta')]}" options="{'no_create': True}"/>
+                <field name="referenti_cliente" widget="many2many_tags" options="{'no_create': True}"
+                       attrs="{'readonly': [('partner_id', '=', False), ('fornitore_id', '=', False)]}"/>
+                <field name="cliente_finale" options="{'no_create': True}"/>
+                <field name="vendor_id" options="{'no_create': True}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='date_deadline']" position="after">
+                <field name="consegna_probabile" placeholder="Mese - Anno"/>
+                <field name="durata_fornitura" placeholder="Mesi"/>
+                <field name="settore" options="{'no_create': True}"/>
+                <field name="stato_lavoro" options="{'no_create': True}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button name="create_trello_card" string="crea Card in Trello" type="object" class="oe_highlight"/>
+            </xpath>
+
+            <xpath expr="//page[@name='lead']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//label[@for='planned_revenue']/.." position="replace">
+                <div>
+                    <label for="planned_revenue" class="oe_edit_only" />
+                    <div class="o_row">
+                        <field name="company_currency" invisible="1"/>
+                        <field name="planned_revenue" widget='monetary' options="{'currency_field': 'company_currency'}"/>
+                    </div>
+                </div>
+            </xpath>
+
+            <xpath expr="//label[@for='probability']/.." position="replace">
+                <field name="probability" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="before">
+                <field name="sorgente_deal" options="{'no_create': True}"/>
+                <field name="create_uid" readonly="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='description']/.." position="attributes">
+                <attribute name="string">Descrizione</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_sale_crm_case_form_view_oppor" model="ir.ui.view">
+        <field name="name">na.crm.lead.oppor.inherited.crm</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(sale_crm.sale_action_quotations_new)d']" position="attributes">
+                <attribute name="attrs">{'invisible': [('tipo_offerta', '=', 'Richiesta di Offerta')]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_crm_case_kanban_view_leads" model="ir.ui.view">
+        <field name="name">na.crm.lead.kanban.lead</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="on_create"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_settore_form" model="ir.ui.view">
+        <field name="name">na.settore.form</field>
+        <field name="model">na.settore</field>
+        <field name="arch" type="xml">
+            <form string="Settore">
+                <group string="Settore">
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="na_stato_lavoro_form" model="ir.ui.view">
+        <field name="name">na.stato.lavoro.form</field>
+        <field name="model">na.stato.lavoro</field>
+        <field name="arch" type="xml">
+            <form string="Stato Lavoro">
+                <group string="Stato Lavoro">
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="na_settore_action" model="ir.actions.act_window">
+        <field name="name">Settore</field>
+        <field name="res_model">na.settore</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="na_stato_lavoro_action" model="ir.actions.act_window">
+        <field name="name">Stato Lavoro</field>
+        <field name="res_model">na.stato.lavoro</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="na_settore_menu"
+        name="Settore"
+        parent="crm.menu_crm_config_lead"
+        action="na_settore_action"
+        sequence="20"
+    />
+
+    <menuitem
+        id="na_stato_lavoro_menu"
+        name="Stato Lavoro"
+        parent="crm.menu_crm_config_lead"
+        action="na_stato_lavoro_action"
+        sequence="21"
+    />
+</odoo>

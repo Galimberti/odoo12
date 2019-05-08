@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="zap_update_dati_testata_vendita" model="ir.config_parameter">
+        <field name="key">nexapp.zap.update_dati_vendita</field>
+        <field name="value">https://hooks.zapier.com/hooks/catch/86832/pacx8h/</field>
+    </record>
+
+    <record id="zap_update_dati_testata_acquisto" model="ir.config_parameter">
+        <field name="key">nexapp.zap.update_dati_acquisto</field>
+        <field name="value">https://hooks.zapier.com/hooks/catch/86832/7fwo54/</field>
+    </record>
+
+    <record id="zap_update_etichetta_articolo_scaffale" model="ir.config_parameter">
+        <field name="key">nexapp.zap.update_etichetta_articolo_scaffale</field>
+        <field name="value">https://hooks.zapier.com/hooks/catch/86832/7taye9/</field>
+    </record>
+
+    <record id="zap_crea_card_in_trello" model="ir.config_parameter">
+        <field name="key">nexapp.zap.crea_card_in_trello</field>
+        <field name="value">https://hooks.zapier.com/hooks/catch/86832/peysgx/</field>
+    </record>
+</odoo>

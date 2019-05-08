@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="na_purchase_order_form" model="ir.ui.view">
+        <field name="name">na.purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                <field name="lunghezza" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}"/>
+                <field name="larghezza" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}"/>
+                <field name="spessore" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}"/>
+                <field name="diametro" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}"/>
+                <field name="product_packaging" options="{'no_create': True}" attrs="{'readonly': True}" groups="product.group_stock_packaging" string="Confezione"/>
+                <field name="qty_udm_base"/>
+                <field name="udm_base" attrs="{'readonly': True}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+                <attribute name="class">short_col</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">
+                <attribute name="class">long_col</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']" position="before">
+                <group>
+                    <field name="flag_supplier_product"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='date_planned']" position="attributes">
+                <attribute name="widget">date</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="destinazione" widget="gplaces_address_autocomplete"
+                       options="{'fillfields': {'destinazione': ['route', 'street_number', 'administrative_area_level_3',
+                       'administrative_area_level_4', 'administrative_area_level_5', 'locality', 'administrative_area_level_2',
+                       'postal_code', 'administrative_area_level_1', 'country']}}"/>
+                <field name="referente"/>
+            </xpath>
+
+            <xpath expr="//field[@name='date_order']" position="after">
+                <field name="note"/>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button name="send_zapier_info" string="Stampa Ordine di Acquisto" type="object"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

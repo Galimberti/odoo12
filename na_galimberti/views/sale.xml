@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="na_view_order_form" model="ir.ui.view">
+        <field name="name">na.sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom']" position="attributes">
+                <attribute name="string">UdM</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position="attributes">
+                <attribute name="string">Q.ty</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                <field name="lunghezza" attrs="{'readonly': [('product_updatable', '=', False)]}"/>
+                <field name="larghezza" attrs="{'readonly': [('product_updatable', '=', False)]}"/>
+                <field name="spessore" attrs="{'readonly': [('product_updatable', '=', False)]}"/>
+                <field name="diametro" attrs="{'readonly': [('product_updatable', '=', False)]}"/>
+                <field name="product_packaging" options="{'no_create': True}" attrs="{'readonly': True}" groups="product.group_stock_packaging" string="Confezione"/>
+                <field name="purchase_id" options="{'no_create': True}" attrs="{'invisible': [('product_id', '=', False)]}" domain="[('product_id','=',product_id)]"/>
+                <field name="qty_udm_base"/>
+                <field name="udm_base" attrs="{'readonly': True}"/>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button name="send_zapier_info" string="Stampa Ordine di Vendita" type="object"/>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="associa_acquisto" attrs="{'readonly': [('acquisto_associato', '=', True)]}"/>
+                <field name="acquisto_associato" invisible="1"/>
+                <field name="prezzo_privato"/>
+            </xpath>
+
+            <xpath expr="//page[@name='order_lines']" position="after">
+                <page string="Macrocategorie" name="macrocategorie">
+                    <field name="macrocategorie">
+                        <tree editable="top" create="false" delete="false" colors="red:differenza&lt;0;">
+                            <field name="categ_id"/>
+                            <field name="sum_costo"/>
+                            <field name="costo_preventivato"/>
+                            <field name="differenza" invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_view_order_form_editable_list" model="ir.ui.view">
+        <field name="name">na.sale.order.form.editable.list</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form_editable_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree" position="attributes">
+                <attribute name="editable">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

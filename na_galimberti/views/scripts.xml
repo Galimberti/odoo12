@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="web_view_editor assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/na_galimberti/static/src/css/table_style.css"/>
+            <script type="text/javascript" src="/na_galimberti/static/src/js/search.js"/>
+        </xpath>
+    </template>
+</odoo>

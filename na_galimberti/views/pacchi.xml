@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="na_pacchi_form" model="ir.ui.view">
+        <field name="name">na.pacchi.form</field>
+        <field name="model">na.pacchi</field>
+        <field name="arch" type="xml">
+            <form>
+                <group string="Pacco">
+                    <field name="name" attrs="{'readonly': True}"/>
+                    <field name="pacchi_product" attrs="{'readonly': [('flag_readonly', '=', True)]}"/>
+                    <field name="flag_readonly" invisible="1"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="na_pacchi_tree" model="ir.ui.view">
+        <field name="name">na.pacchi.tree</field>
+        <field name="model">na.pacchi</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="pacchi_product"/>
+                <field name="flag_order"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="na_pacchi_action" model="ir.actions.act_window">
+        <field name="name">Pacchi</field>
+        <field name="res_model">na.pacchi</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="na_pacchi_tree"/>
+    </record>
+
+    <menuitem
+        id="na_pacchi_menu"
+        name="Pacchi"
+        parent="stock.menu_stock_inventory_control"
+        action="na_pacchi_action"
+        sequence="10"
+    />
+
+    <record id="na_pacchi_product_form" model="ir.ui.view">
+        <field name="name">na.pacchi.product.form</field>
+        <field name="model">na.pacchi.product</field>
+        <field name="arch" type="xml">
+            <form>
+                <group string="Prodotto">
+                    <field name="product_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="lunghezza"/>
+                    <field name="larghezza"/>
+                    <field name="spessore"/>
+                    <field name="diametro"/>
+                    <field name="qty"/>
+                    <field name="n_pacco" invisible="1"/>
+                </group>
+                <group/>
+            </form>
+        </field>
+    </record>
+
+    <record id="na_pacchi_product_tree" model="ir.ui.view">
+        <field name="name">na.pacchi.product.tree</field>
+        <field name="model">na.pacchi.product</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="product_id"/>
+                <field name="lunghezza"/>
+                <field name="larghezza"/>
+                <field name="spessore"/>
+                <field name="diametro"/>
+                <field name="qty"/>
+                <field name="n_pacco" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

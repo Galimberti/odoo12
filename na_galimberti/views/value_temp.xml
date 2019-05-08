@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_na_value_char_form" model="ir.ui.view">
+        <field name="name">na.value.char.form</field>
+        <field name="model">na.value.char</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" />
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_na_value_int_form" model="ir.ui.view">
+        <field name="name">na.value.int.form</field>
+        <field name="model">na.value.int</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" />
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_na_value_dec_form" model="ir.ui.view">
+        <field name="name">na.value.dec.form</field>
+        <field name="model">na.value.dec</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" />
+                </group>
+            </form>
+        </field>
+    </record>
+
+</odoo>

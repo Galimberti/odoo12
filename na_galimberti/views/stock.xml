@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="na_view_picking_form" model="ir.ui.view">
+        <field name="name">na.stock.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="after">
+                <field name="lunghezza"/>
+                <field name="larghezza"/>
+                <field name="spessore"/>
+                <field name="diametro"/>
+                <field name="flag_no_conf"/>
+<!--                <field name="pacco_from" domain="[('id', 'in', pacchi_ids)]" options="{'no_create': True, 'no_open': True}"-->
+<!--                       widget="many2many_tags"-->
+<!--                       attrs="{'readonly': ['|', ('flag_pacco', '=', False), ('code_picking', '=', 'incoming')], 'required': [('code_picking', '!=', 'incoming'), ('flag_pacco', '=', True)]}"/>-->
+<!--                <field name="pacco_to" domain="[('id', 'in', pacchi_ids)]" widget="many2many_tags"-->
+<!--                       options="{'no_create': True, 'no_open': True}" readonly="1"/>-->
+                <field name="code_picking" invisible="1"/>
+<!--                <field name="flag_pacco" invisible="1"/>-->
+<!--                <field name="pacchi_ids" invisible="1"/>-->
+            </xpath>
+
+            <xpath expr="//field[@name='move_ids_without_package']/tree" position="attributes">
+                <attribute name="editable"></attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='move_ids_without_package']" position="inside">
+                <form>
+                    <group>
+                        <field name="product_id" readonly="1"/>
+                        <field name="lunghezza" readonly="1"/>
+                        <field name="larghezza" readonly="1"/>
+                        <field name="spessore" readonly="1"/>
+                        <field name="diametro" readonly="1"/>
+                        <field name="flag_no_conf"/>
+<!--                        <field name="pacco_from" widget="many2many_tags"/>-->
+<!--                        <field name="pacco_to" widget="many2many_tags" readonly="1"/>-->
+                        <field name="product_uom_qty" readonly="1"/>
+                        <field name="reserved_availability" readonly="1"/>
+                        <field name="quantity_done"/>
+                        <field name="product_uom" readonly="1"/>
+                    </group>
+                </form>
+            </xpath>
+        </field>
+    </record>
+</odoo>

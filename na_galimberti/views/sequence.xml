@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.sequence" id="na_seq_pacchi">
+        <field name="name">Na Pacchi</field>
+        <field name="code">na.pacchi.sequence</field>
+        <field name="padding">6</field>
+    </record>
+
+    <record model="ir.sequence" id="na_seq_rif_product">
+        <field name="name">Na Rif. Product</field>
+        <field name="code">na.rif.product.sequence</field>
+        <field name="padding">4</field>
+    </record>
+</odoo>

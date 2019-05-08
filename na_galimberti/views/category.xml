@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="na_product_category_form" model="ir.ui.view">
+        <field name="name">product.category.form</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='parent_id']" position="after">
+                <field name="caratteristica_ids" widget="many2many_tags" class="oe_inline"/>
+                <field name="pattern_product"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_product_category_search_view" model="ir.ui.view">
+        <field name="name">na.product.category.search</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="complete_name"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_caratteristica_form" model="ir.ui.view">
+        <field name="name">na.caratteristica.form</field>
+        <field name="model">na.caratteristica</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="add_new_caratteristica" string="Aggiorna Caratteristica su Prodotti" type="object"
+                            confirm="Confermi?"/>
+                </header>
+                <group string="Caratteristiche">
+                    <field name="name"/>
+                    <field name="uom_id"/>
+                    <field name="tipo_dato"/>
+                    <field name="cod_tendina"
+                           attrs="{'required': [('tipo_dato', '=', 'selection')], 'invisible': [('tipo_dato', '!=', 'selection')]}"/>
+
+                    <field name="valori_multipli"/>
+                    <field name="obbligatorio"/>
+                    <field name="variabile_ordine"/>
+                </group>
+                <group>
+                    <field name="codice_pattern"/>
+                    <field name="category_ids" widget="many2many_tags"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="na_caratteristica_tree" model="ir.ui.view">
+        <field name="name">na.caratteristica.tree</field>
+        <field name="model">na.caratteristica</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="uom_id"/>
+                <field name="tipo_dato"/>
+                <field name="codice_pattern"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="na_caratteristica_action" model="ir.actions.act_window">
+        <field name="name">Caratteristiche</field>
+        <field name="res_model">na.caratteristica</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="na_caratteristica_tree"/>
+    </record>
+
+    <menuitem
+        id="na_caratteristica_menu"
+        name="Caratteristiche"
+        parent="stock.menu_product_in_config_stock"
+        action="na_caratteristica_action"
+        sequence="3"
+    />
+
+    <record id="na_category_value_tree" model="ir.ui.view">
+        <field name="name">na.category.value.tree</field>
+        <field name="model">na.category.value</field>
+        <field name="arch" type="xml">
+            <tree create="false" delete="false">
+                <field name="product_id" invisible="True"/>
+                <field name="categ_id" invisible="True"/>
+                <field name="caratteristica_id" readonly="True"/>
+                <field name="uom_id" readonly="True"/>
+                <field name="value_char"/>
+                <field name="value_ids" invisible="True"/>
+                <field name="type" invisible="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="na_category_value_form" model="ir.ui.view">
+        <field name="name">na.category.value.form</field>
+        <field name="model">na.category.value</field>
+        <field name="arch" type="xml">
+            <form create="false" delete="false">
+                <group>
+                    <field name="product_id" invisible="True"/>
+                    <field name="categ_id" invisible="True"/>
+                    <field name="cod_tendina" invisible="True" context="{'cod_tendina': cod_tendina}"/>
+
+                    <field name="caratteristica_id" readonly="True"/>
+                    <field name="type" readonly="True"/>
+                    <field name="uom_id" readonly="False"/>
+                    <!--<field name="uom_id" readonly="True" attrs="{'invisible': [('uom_id', '=', False)]}"/>-->
+
+                    <field name="testo"
+                           attrs="{'invisible': ['|',('type', '!=', 'char'),('valori_multipli', '=', True)]}"/>
+                    <field name="intero"
+                           attrs="{'invisible': ['|',('type', '!=', 'integer'),('valori_multipli', '=', True)]}"/>
+                    <field name="decimale"
+                           attrs="{'invisible': ['|',('type', '!=', 'float'),('valori_multipli', '=', True)]}"/>
+                    <field name="tendina_m2o" options="{'no_create': True, 'no_open': True}"
+                           attrs="{'invisible': ['|',('type', '!=', 'selection'),('valori_multipli', '=', True)]}"
+                           domain="[('parent_id', '=', cod_tendina)]"/>
+
+                    <field name="value_char_ids" widget="many2many_tags" options="{'no_edit': True, 'no_open': True}"
+                           domain="[('id', '=', 0)]"
+                           attrs="{'invisible': ['|',('type', '!=', 'char'),('valori_multipli', '=', False)]}"/>
+                    <field name="value_int_ids" widget="many2many_tags" options="{'no_edit': True, 'no_open': True}}"
+                           domain="[('id', '=', 0)]"
+                           attrs="{'invisible': ['|',('type', '!=', 'integer'),('valori_multipli', '=', False)]}"/>
+                    <field name="value_dec_ids" widget="many2many_tags" options="{'no_edit': True, 'no_open': True}}"
+                           domain="[('id', '=', 0)]"
+                           attrs="{'invisible': ['|',('type', '!=', 'float'),('valori_multipli', '=', False)]}"/>
+                    <field name="tendina_m2m" widget="many2many_tags" domain="[('parent_id', '=', cod_tendina)]"
+                           options="{'no_edit': True, 'no_create': True, 'no_open': True}}"
+                           attrs="{'invisible': ['|',('type', '!=', 'selection'),('valori_multipli', '=', False)]}"/>
+
+                    <field name="valori_multipli" invisible="True"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+</odoo>

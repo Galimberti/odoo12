@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_na_res_email_form" model="ir.ui.view">
+        <field name="name">na.res.email.form</field>
+        <field name="model">na.res.email</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" />
+                </group>
+            </form>
+        </field>
+    </record>
+
+</odoo>

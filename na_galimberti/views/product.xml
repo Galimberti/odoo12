@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="na_product_template_search_view" model="ir.ui.view">
+        <field name="name">na.product.template.search</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="replace">
+                <field name="categ_id" filter_domain="[('categ_id.complete_name', 'ilike', self)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_product_template_form_view" model="ir.ui.view">
+        <field name="name">na.product.template.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='inventory']" position="before">
+                <page string="Caratteristiche" name="caratteristiche">
+                    <field name="category_value_ids" />
+                </page>
+            </xpath>
+
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="fornitore" options="{'no_create': True}"/>
+                <field name="link"/>
+            </xpath>
+
+            <xpath expr="//field[@name='uom_po_id']/.." position="after">
+                <fieldset>
+                    <legend>Ricarico</legend>
+                    <group>
+                        <field name="ricarico_id"/>
+                        <field name="prezzo_pk_proposto"/>
+                    </group>
+                    <group>
+                        <field name="aggiust_pk"/>
+                        <field name="aggiust_sciolto"/>
+                        <field name="prezzo_impresa"/>
+                        <field name="prezzo_privato"/>
+                    </group>
+                </fieldset>
+            </xpath>
+
+            <xpath expr="//field[@name='description_sale']" position="replace">
+                <field name="description_sale_pattern" nolabel="1" placeholder="This note will show up on sales orders."
+                       readonly="1"/>
+            </xpath>
+
+            <xpath expr="//div[@name='options']" position="before">
+                <label for="name_pattern"/>
+                <field name="name_pattern"/>
+            </xpath>
+
+            <xpath expr="//group[@name='description']" position="before">
+                <field name="description_sale" invisible="1"/>
+                <field name="description_purchase" invisible="1"/>
+                <field name="description_pickingout" invisible="1"/>
+                <field name="description_pickingin" invisible="1"/>
+                <field name="description_picking" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="attrs">{'readonly': True}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='list_price']" position="before">
+                <field name="flag_pacco"/>
+                <field name="flag_pacco_only"/>
+                <field name="confezione_vendita"
+                       context="{'default_conf_type': 'Vendita', 'default_product_id': product_variant_id, 'default_fornitore': fornitore}"/>
+                <field name="confezione_acquisto"
+                       context="{'default_conf_type': 'Acquisto', 'default_product_id': product_variant_id, 'default_fornitore': fornitore}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='uom_id']" position="before">
+                <field name="conv_rate" attrs="{'required': [('uom_base', '!=', False)]}"/>
+                <field name="uom_base" attrs="{'required': [('conv_rate', '>', 0)]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='uom_id']" position="attributes">
+                <attribute name="string">UDM di Vendita</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='uom_po_id']" position="attributes">
+                <attribute name="string">UDM di Acquisto</attribute>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button name="send_zapier_info" string="Stampa Etichetta Prodotto" type="object"/>
+            </xpath>
+
+            <xpath expr="//page[@name='general_information']/group/group/field[@name='type']" position="before">
+                <field name="su_misura"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_view_product_supplier_inherit" model="ir.ui.view">
+        <field name="name">na.product.template.supplier.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="purchase.view_product_supplier_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='purchase']/group/field[@name='description_purchase']" position="replace">
+                <field name="description_purchase_pattern" nolabel="1" placeholder="This note will show up on sales orders."
+                       readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_view_template_property_form" model="ir.ui.view">
+        <field name="name">na.template.property.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.view_template_property_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='description_pickingout']" position="replace">
+                <field name="description_pickingout_pattern" nolabel="1" placeholder="This note will show up on delivery orders."/>
+            </xpath>
+
+            <xpath expr="//field[@name='description_pickingin']" position="replace">
+                <field name="description_pickingin_pattern" nolabel="1"
+                       placeholder="This note will show up on the receipt orders (e.g. where to store the product in the warehouse)."/>
+            </xpath>
+
+            <xpath expr="//field[@name='description_picking']" position="replace">
+                <field name="description_picking_pattern" nolabel="1"
+                       placeholder="This note will show up  on internal transfer orders (e.g. where to pick the product in the warehouse)."/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="stock.product_template_action_product" model="ir.actions.act_window">
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+
+    <record id="na_product_template_tree_view" model="ir.ui.view">
+        <field name="name">na.product.template.tree</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="replace">
+                <tree string="Prodotti" editable="top">
+                    <field name="sequence" widget="handle"/>
+                    <button name="open_product_form" string="Apri" type="object"/>
+                    <field name="default_code" readonly="1"/>
+                    <field name="name" readonly="1"/>
+                    <field name="list_price" string="Vendita"/>
+                    <field name="uom_id" string="UdM Ven"/>
+                    <field name="standard_price"/>
+                    <field name="uom_po_id" string="UdM Acq"/>
+                    <field name="flag_pacco_only" string="P.U."/>
+                    <field name="categ_id" attrs="{'readonly': [('id', '!=', False)]}"/>
+                    <field name="qty_available" readonly="1" string="Q.tà Mag Ven"/>
+                    <field name="qty_prenotata" readonly="1" string="Q.tà Prenotata"/>
+                    <field name="qty_proposta" readonly="1" string="Q.tà Proposta"/>
+                    <field name="qty_to_order" string="Q.tà Richiesta"/>
+                    <field name="qty_effettiva" string="Q.tà Effettiva"/>
+                    <field name="id" invisible="1"/>
+                    <field name="type" invisible="1"/>
+                    <field name="uom_id" invisible="1"/>
+                    <field name="active" invisible="1"/>
+                </tree>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_product_template_only_form_view" model="ir.ui.view">
+        <field name="name">na.product.template.product.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='default_code']" position="after">
+                <field name="codice_fornitore"/>
+                <field name="qty_ottimale"/>
+                <field name="qty_on_sale" readonly="1"/>
+                <field name="qty_on_purchase" readonly="1"/>
+                <!--<field name="codice_fornitore" attrs="{'required': [('fornitore', '!=', False)]}"/>-->
+            </xpath>
+        </field>
+    </record>
+
+    <record id="na_product_packaging_form_view" model="ir.ui.view">
+        <field name="name">na.product.packaging.form.view</field>
+        <field name="model">product.packaging</field>
+        <field name="inherit_id" ref="product.product_packaging_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="conf_type" widget="radio"/>
+                <field name="fornitore" options="{'no_create': True}"/>
+                <field name="priority"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="create_purchase_orders" model="ir.actions.server">
+        <field name="name">Crea Ordini di Acquisto</field>
+        <field name="model_id" ref="model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.create_purchase_orders()
+        </field>
+    </record>
+
+    <menuitem
+        id="viste_personalizzate"
+        name="Viste Personalizzate"
+        parent="stock.menu_stock_root"
+        sequence="100"
+    />
+
+    <record id="stock.product_template_action_product" model="ir.actions.act_window">
+        <field name="name">Giacenza Acquisti</field>
+    </record>
+
+    <menuitem
+        id="stock.menu_product_variant_config_stock"
+        name="Giacenza Acquisti"
+        parent="viste_personalizzate"
+        action="stock.product_template_action_product"
+        sequence="1"
+    />
+
+    <record id="product_view_tree_acquisti" model="ir.actions.act_window.view">
+        <field name="sequence" eval="0"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="product.product_template_tree_view"/>
+        <field name="act_window_id" ref="stock.product_template_action_product"/>
+    </record>
+
+    <record id="product_view_kanban_acquisti" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="product.product_template_kanban_view"/>
+        <field name="act_window_id" ref="stock.product_template_action_product"/>
+    </record>
+
+    <record id="product_view_form_acquisti" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product.product_template_form_view"/>
+        <field name="act_window_id" ref="stock.product_template_action_product"/>
+    </record>
+
+    <record id="product_template_action_product_magazzino" model="ir.actions.act_window">
+        <field name="name">Giacenza Magazzino</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_type">form</field>
+        <field name="context">{"search_default_consumable": 1, 'default_type': 'product'}</field>
+    </record>
+
+    <menuitem
+        id="menu_product_variant_config_stock_magazzino"
+        name="Giacenza Magazzino"
+        parent="viste_personalizzate"
+        action="product_template_action_product_magazzino"
+        sequence="2"
+    />
+
+
+    <record id="na_product_template_tree_view_magazzino" model="ir.ui.view">
+        <field name="name">na.product.template.tree.magazzino</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <tree string="Prodotti" create="0" edit="0" delete="0">
+                <field name="sequence" widget="handle"/>
+                <field name="default_code" readonly="1"/>
+                <field name="name" readonly="1"/>
+                <field name="uom_id" string="UdM Ven"/>
+                <field name="uom_po_id" string="UdM Acq"/>
+                <field name="qty_available" readonly="1" string="Q.tà Mag Ven"/>
+                <field name="flag_pacco_only" string="P.U."/>
+                <field name="categ_id" attrs="{'readonly': [('id', '!=', False)]}"/>
+                <field name="id" invisible="1"/>
+                <field name="type" invisible="1"/>
+                <field name="uom_id" invisible="1"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="product_view_tree_magazzino" model="ir.actions.act_window.view">
+        <field name="sequence" eval="0"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="na_product_template_tree_view_magazzino"/>
+        <field name="act_window_id" ref="product_template_action_product_magazzino"/>
+    </record>
+
+    <record id="product_view_kanban_magazzino" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="product.product_template_kanban_view"/>
+        <field name="act_window_id" ref="product_template_action_product_magazzino"/>
+    </record>
+
+    <record id="product_view_form_magazzino" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product.product_template_form_view"/>
+        <field name="act_window_id" ref="product_template_action_product_magazzino"/>
+    </record>
+
+    <record id="na_product_template_form_view_procurement_button" model="ir.ui.view">
+        <field name="name">na.product.template_procuremen</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+        <field name="arch" type="xml">
+            <button name="action_open_quants" position="replace">
+                <button type="object"
+                    name="action_open_quants"
+                    attrs="{'invisible':[('type', '!=', 'product')]}"
+                    class="oe_stat_button" icon="fa-building-o">
+                    <div class="o_field_widget o_stat_info">
+                        <field name="qty_available_uom_base" widget="statinfo" nolabel="1"/>
+                        <field name="uom_base" readonly="1" widget="statinfo" nolabel="1" options="{'no_open': True}"/>
+                        <span class="o_stat_text">In Possesso</span>
+                    </div>
+                </button>
+            </button>
+        </field>
+    </record>
+
+    <record id="product_ricarico_form" model="ir.ui.view">
+        <field name="name">product.ricarico.form</field>
+        <field name="model">product.ricarico</field>
+        <field name="arch" type="xml">
+            <form>
+                <group string="Ricarico">
+                    <field name="name"/>
+                    <field name="ricarico"/>
+                    <field name="aum_sciolto"/>
+                    <field name="ricarico_minimo"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="product_ricarico_tree" model="ir.ui.view">
+        <field name="name">product.ricarico.tree</field>
+        <field name="model">product.ricarico</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="ricarico"/>
+                <field name="aum_sciolto"/>
+                <field name="ricarico_minimo"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="product_ricarico_action" model="ir.actions.act_window">
+        <field name="name">Ricarichi</field>
+        <field name="res_model">product.ricarico</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="product_ricarico_tree"/>
+    </record>
+
+    <menuitem
+        id="product_ricarico_menu"
+        name="Ricarichi"
+        parent="stock.menu_product_in_config_stock"
+        action="product_ricarico_action"
+        sequence="5"
+    />
+</odoo>
